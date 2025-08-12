@@ -1,0 +1,52 @@
+-- elevate-labs 
+-- suranjan jana
+-- task-6 [12-08-2025]
+
+-- 1. Scalar Subquery in a SELECT Clause
+-- SQL query
+
+SELECT
+  CustomerName,
+  (SELECT COUNT(OrderID) FROM Orders WHERE Orders.CustomerID = Customers.CustomerID) AS TotalOrders
+FROM
+  Customers;
+
+-- 2. Subquery in a WHERE Clause with IN
+-- SQL query
+
+SELECT
+  CustomerName
+FROM
+  Customers
+WHERE
+  CustomerID IN (SELECT CustomerID FROM Orders);
+
+--3. Correlated Subquery in a WHERE Clause with EXISTS
+-- SQL query
+
+SELECT
+  CustomerName
+FROM
+  Customers
+WHERE
+  EXISTS (SELECT 1 FROM Orders WHERE Orders.CustomerID = Customers.CustomerID);
+
+--4. Subquery in a FROM Clause
+-- SQL query
+
+SELECT
+  c.CustomerName,
+  co.OrderCount
+FROM
+  Customers AS c
+JOIN
+  (
+    SELECT
+      CustomerID,
+      COUNT(OrderID) AS OrderCount
+    FROM
+      Orders
+    GROUP BY
+      CustomerID
+  ) AS co
+ON c.CustomerID = co.CustomerID;
